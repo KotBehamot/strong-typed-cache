@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog and this project adheres to Semantic Versioning.
 
+## [1.0.0] - 2025-10-26
+### Changed
+- Promoted to stable 1.0.0. API surface unchanged from 0.3.0.
+
+### Fixed
+- Integration tests added for DI registration (options and configuration binding) to guard behavior.
+
 ## [0.3.0] - 2025-10-26
 ### Fixed
 - `InMemoryCache` now correctly commits entries by disposing `ICacheEntry` during `CreateEntry` (previously entries might not be persisted, causing `TryGetValue` to fail).
