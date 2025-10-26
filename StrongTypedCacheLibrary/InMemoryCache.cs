@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Reflection;
+﻿using System.Collections.Concurrent;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Internal;
 using StrongTypedCache.Abstractions;
@@ -14,15 +13,12 @@ namespace Cache;
 public class InMemoryCache<TKey, TValue> : ICache<TKey, TValue>
     where TValue : new()
 {
-    private readonly TimeSpan AbsoluteExpirationTimeSec;
-    private readonly IMemoryCache MemoryCacheInstance;
-    private readonly PropertyInfo EntriesCollectionProperty;
-    private readonly PropertyInfo ValueProperty;
+    private readonly TimeSpan _absoluteExpiration;
+    private readonly IMemoryCache _memoryCache;
+    private readonly ConcurrentDictionary<TKey, byte> _keys = new();
 
-    public TimeSpan AbsoluteExpiration => AbsoluteExpirationTimeSec;
-    public IMemoryCache MemoryCache => MemoryCacheInstance;
-    public PropertyInfo EntriesCollection => EntriesCollectionProperty;
-    public PropertyInfo ValueProp => ValueProperty;
+    public TimeSpan AbsoluteExpiration => _absoluteExpiration;
+    public IMemoryCache MemoryCache => _memoryCache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InMemoryCache{TKey, TValue}"/> class.
@@ -31,23 +27,24 @@ public class InMemoryCache<TKey, TValue> : ICache<TKey, TValue>
     public InMemoryCache(int absoluteExpirationTimeSec = 3600)
     {
         var options = new MemoryCacheOptions { Clock = new SystemClock() };
-        MemoryCacheInstance = new MemoryCache(options);
-        AbsoluteExpirationTimeSec = TimeSpan.FromSeconds(absoluteExpirationTimeSec);
-        EntriesCollectionProperty = typeof(MemoryCache).GetProperty("EntriesCollection", BindingFlags.NonPublic | BindingFlags.Instance);
-        ValueProperty = typeof(TValue).GetProperty("value");
+        _memoryCache = new MemoryCache(options);
+        _absoluteExpiration = TimeSpan.FromSeconds(absoluteExpirationTimeSec);
     }
 
     /// <inheritdoc />
     public List<TValue?> GetAllValues()
     {
-        var collection = EntriesCollectionProperty.GetValue(MemoryCacheInstance) as ICollection;
         var items = new List<TValue?>();
-        if (collection != null)
+        foreach (var key in _keys.Keys)
         {
-            foreach (var item in collection)
+            if (_memoryCache.TryGetValue(key!, out TValue value))
             {
-                var val = ValueProperty.GetValue(item);
-                items.Add((TValue?)val);
+                items.Add(value);
+            }
+            else
+            {
+                // Clean up expired/missing keys
+                _keys.TryRemove(key, out _);
             }
         }
         return items;
@@ -56,7 +53,7 @@ public class InMemoryCache<TKey, TValue> : ICache<TKey, TValue>
     /// <inheritdoc />
     public bool TryGetValue(TKey key, out TValue value)
     {
-        return MemoryCacheInstance.TryGetValue(key, out value);
+        return _memoryCache.TryGetValue(key!, out value!);
     }
 
     /// <inheritdoc />
@@ -64,9 +61,14 @@ public class InMemoryCache<TKey, TValue> : ICache<TKey, TValue>
     {
         if (key is null) throw new ArgumentNullException(nameof(key));
         if (value is null) throw new ArgumentNullException(nameof(value));
-        var entry = MemoryCacheInstance.CreateEntry(key);
-        entry.SetValue(value);
-        entry.SetAbsoluteExpiration(AbsoluteExpirationTimeSec);
+
+        using (var entry = _memoryCache.CreateEntry(key))
+        {
+            entry.SetValue(value);
+            entry.SetAbsoluteExpiration(_absoluteExpiration);
+        } // disposing commits the entry to the cache
+
+        _keys[key] = 0; // track key
         return true;
     }
 
@@ -74,6 +76,7 @@ public class InMemoryCache<TKey, TValue> : ICache<TKey, TValue>
     public void Remove(TKey key)
     {
         if (key is null) throw new ArgumentNullException(nameof(key));
-        MemoryCacheInstance.Remove(key);
+        _memoryCache.Remove(key);
+        _keys.TryRemove(key, out _);
     }
 }

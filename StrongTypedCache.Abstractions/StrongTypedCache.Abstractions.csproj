@@ -7,7 +7,7 @@
 
     <!-- NuGet metadata -->
     <PackageId>StrongTypedCache.Abstractions</PackageId>
-    <Version>0.2.0</Version>
+    <Version>0.3.0</Version>
     <Authors>KotBehamot</Authors>
     <Description>Abstractions for a strongly-typed cache.</Description>
     <RepositoryUrl>https://github.com/KotBehamot/strong-typed-cache</RepositoryUrl>
