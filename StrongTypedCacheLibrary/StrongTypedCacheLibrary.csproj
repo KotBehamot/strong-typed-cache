@@ -4,6 +4,19 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+
+    <!-- NuGet metadata -->
+    <PackageId>StrongTypedCache.InMemory</PackageId>
+    <Version>0.2.0</Version>
+    <Authors>KotBehamot</Authors>
+    <Description>In-memory strongly-typed cache implementation.</Description>
+    <RepositoryUrl>https://github.com/KotBehamot/strong-typed-cache</RepositoryUrl>
+    <PackageTags>cache;in-memory;strongly-typed;dotnet</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

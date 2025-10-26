@@ -5,5 +5,8 @@ namespace StrongTypedCache.Abstractions;
 /// </summary>
 public interface ICacheOptions
 {
-    // Define cache options properties here in the future.
+    /// <summary>
+    /// Absolute expiration time in seconds.
+    /// </summary>
+    int AbsoluteExpirationTimeSec { get; }
 }

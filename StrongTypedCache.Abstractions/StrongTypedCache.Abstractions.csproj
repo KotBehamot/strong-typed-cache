@@ -4,6 +4,19 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+
+    <!-- NuGet metadata -->
+    <PackageId>StrongTypedCache.Abstractions</PackageId>
+    <Version>0.2.0</Version>
+    <Authors>KotBehamot</Authors>
+    <Description>Abstractions for a strongly-typed cache.</Description>
+    <RepositoryUrl>https://github.com/KotBehamot/strong-typed-cache</RepositoryUrl>
+    <PackageTags>cache;in-memory;strongly-typed;dotnet;di</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
   </PropertyGroup>
 
 </Project>

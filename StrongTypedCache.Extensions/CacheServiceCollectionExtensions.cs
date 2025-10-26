@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StrongTypedCache.Abstractions;
 using Cache;
@@ -27,5 +28,35 @@ public static class CacheServiceCollectionExtensions
         services.AddSingleton<ICache<TKey, TValue>>(_ =>
             new InMemoryCache<TKey, TValue>(absoluteExpirationTimeSec));
         return services;
+    }
+
+    /// <summary>
+    /// Registers cache using provided <see cref="CacheOptions"/>.
+    /// </summary>
+    public static IServiceCollection AddStrongTypedInMemoryCache<TKey, TValue>(
+        this IServiceCollection services,
+        CacheOptions options)
+        where TValue : new()
+    {
+        if (services == null) throw new ArgumentNullException(nameof(services));
+        if (options == null) throw new ArgumentNullException(nameof(options));
+        return services.AddStrongTypedInMemoryCache<TKey, TValue>(options.AbsoluteExpirationTimeSec);
+    }
+
+    /// <summary>
+    /// Registers cache and binds options from configuration section (default section name: "StrongTypedCache").
+    /// </summary>
+    public static IServiceCollection AddStrongTypedInMemoryCache<TKey, TValue>(
+        this IServiceCollection services,
+        IConfiguration configuration,
+        string sectionName = "StrongTypedCache")
+        where TValue : new()
+    {
+        if (services == null) throw new ArgumentNullException(nameof(services));
+        if (configuration == null) throw new ArgumentNullException(nameof(configuration));
+
+        var options = new CacheOptions();
+        configuration.GetSection(sectionName).Bind(options);
+        return services.AddStrongTypedInMemoryCache<TKey, TValue>(options);
     }
 }
