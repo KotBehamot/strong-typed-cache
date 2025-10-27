@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog and this project adheres to Semantic Versioning.
 
+## [Unreleased]
+### Added
+- Comprehensive benchmark suite using BenchmarkDotNet covering:
+  - CreateEntry benchmarks for multiple key types (int, string, Guid, complex objects)
+  - TryGetValue benchmarks with hit/miss scenarios and access patterns
+  - GetAllValues benchmarks with various data sizes and expiration scenarios
+  - Remove benchmarks with different removal patterns
+- Mixed-operation benchmarks simulating realistic workloads
+  - Memory allocation benchmarks testing GC pressure and object sizes
+- Benchmark CI/CD integration: runs on main branch pushes and releases
+- Benchmark results exported as HTML, Markdown, CSV, and plots
+- Detailed benchmark documentation in StrongTypedCache.Benchmarks/README.md
+
 ## [1.0.1] - 2025-10-27
 ### Changed
 - CI: Pack and publish all three NuGet packages (Abstractions, InMemory, Extensions) instead of only Extensions.

@@ -26,3 +26,32 @@ jobs:
 
     - name: Test
       run: dotnet test --no-build --configuration Release --verbosity normal
+
+  benchmark:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Run Benchmarks
+      run: |
+        cd StrongTypedCache.Benchmarks
+        dotnet run -c Release -- --filter * --exporters json markdown html
+
+    - name: Upload Benchmark Results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: benchmark-results
+        path: StrongTypedCache.Benchmarks/BenchmarkDotNet.Artifacts/results/
+        retention-days: 30
