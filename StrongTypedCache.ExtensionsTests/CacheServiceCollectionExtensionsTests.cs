@@ -83,7 +83,7 @@ namespace StrongTypedCache.Extensions.Tests
         [TestMethod()]
         public void AddStrongTypedInMemoryCache_ThrowsArgumentNullException_WhenServicesIsNull()
         {
-            IServiceCollection services = null;
+            IServiceCollection services = null!;
             Assert.ThrowsException<ArgumentNullException>(() =>
                 StrongTypedCache.Extensions.CacheServiceCollectionExtensions.AddStrongTypedInMemoryCache<int, DummyValue>(services));
         }
@@ -92,7 +92,7 @@ namespace StrongTypedCache.Extensions.Tests
         public void AddStrongTypedInMemoryCache_WithOptions_Throws_WhenOptionsIsNull()
         {
             var services = new ServiceCollection();
-            CacheOptions options = null;
+            CacheOptions options = null!;
             Assert.ThrowsException<ArgumentNullException>(() => services.AddStrongTypedInMemoryCache<int, DummyValue>(options));
         }
 
@@ -100,7 +100,7 @@ namespace StrongTypedCache.Extensions.Tests
         public void AddStrongTypedInMemoryCache_WithConfiguration_Throws_WhenConfigIsNull()
         {
             var services = new ServiceCollection();
-            IConfiguration config = null;
+            IConfiguration config = null!;
             Assert.ThrowsException<ArgumentNullException>(() => services.AddStrongTypedInMemoryCache<int, DummyValue>(config));
         }
 

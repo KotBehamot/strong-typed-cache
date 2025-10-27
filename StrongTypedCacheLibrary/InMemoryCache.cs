@@ -11,13 +11,21 @@ namespace Cache;
 /// <typeparam name="TKey">Type of the cache key.</typeparam>
 /// <typeparam name="TValue">Type of the cache value.</typeparam>
 public class InMemoryCache<TKey, TValue> : ICache<TKey, TValue>
+    where TKey : notnull
     where TValue : new()
 {
     private readonly TimeSpan _absoluteExpiration;
     private readonly IMemoryCache _memoryCache;
     private readonly ConcurrentDictionary<TKey, byte> _keys = new();
 
+    /// <summary>
+    /// Gets the absolute expiration time for cache entries.
+    /// </summary>
     public TimeSpan AbsoluteExpiration => _absoluteExpiration;
+  
+    /// <summary>
+    /// Gets the underlying <see cref="IMemoryCache"/> instance.
+    /// </summary>
     public IMemoryCache MemoryCache => _memoryCache;
 
     /// <summary>
@@ -37,7 +45,7 @@ public class InMemoryCache<TKey, TValue> : ICache<TKey, TValue>
         var items = new List<TValue?>();
         foreach (var key in _keys.Keys)
         {
-            if (_memoryCache.TryGetValue(key!, out TValue value))
+            if (_memoryCache.TryGetValue(key, out TValue value))
             {
                 items.Add(value);
             }
@@ -53,7 +61,7 @@ public class InMemoryCache<TKey, TValue> : ICache<TKey, TValue>
     /// <inheritdoc />
     public bool TryGetValue(TKey key, out TValue value)
     {
-        return _memoryCache.TryGetValue(key!, out value!);
+        return _memoryCache.TryGetValue(key, out value);
     }
 
     /// <inheritdoc />

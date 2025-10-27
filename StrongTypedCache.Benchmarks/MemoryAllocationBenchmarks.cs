@@ -1,6 +1,5 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Engines;
-using BenchmarkDotNet.Diagnostics.Windows.Configs;
 using Cache;
 
 namespace StrongTypedCache.Benchmarks;
@@ -82,36 +81,36 @@ public class MemoryAllocationBenchmarks
         {
        for (int i = 0; i < DataSize / 5; i++)
     {
-     _cacheShortExpiration!.CreateEntry(i, new BenchmarkValue 
+   _cacheShortExpiration!.CreateEntry(i, new BenchmarkValue 
           { 
         Data = $"Cycle_{cycle}_Value_{i}", 
 Timestamp = DateTime.UtcNow, 
-        Counter = i 
+     Counter = i 
     });
       }
         Thread.Sleep(300); // Let some entries expire
-            _cacheShortExpiration.GetAllValues(); // Trigger cleanup
+     var allValues = _cacheShortExpiration.GetAllValues(); // Trigger cleanup
         }
     }
 
     [Benchmark]
     public void Memory_LongExpiration_Accumulation()
     {
-        // Test memory accumulation with long-lived entries
+  // Test memory accumulation with long-lived entries
         for (int i = 0; i < DataSize; i++)
-        {
+   {
             _cacheLongExpiration!.CreateEntry(i, new BenchmarkValue 
    { 
         Data = $"LongLived_{i}", 
      Timestamp = DateTime.UtcNow, 
     Counter = i 
 });
-        }
+   }
         
         // Keep accessing to ensure no GC
    for (int i = 0; i < DataSize; i++)
-        {
-            _cacheLongExpiration.TryGetValue(i, out var _);
+    {
+          var found = _cacheLongExpiration.TryGetValue(i, out var _);
   }
     }
 

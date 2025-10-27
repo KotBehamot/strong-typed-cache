@@ -11,11 +11,18 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
   - TryGetValue benchmarks with hit/miss scenarios and access patterns
   - GetAllValues benchmarks with various data sizes and expiration scenarios
   - Remove benchmarks with different removal patterns
-- Mixed-operation benchmarks simulating realistic workloads
+  - Mixed-operation benchmarks simulating realistic workloads
   - Memory allocation benchmarks testing GC pressure and object sizes
 - Benchmark CI/CD integration: runs on main branch pushes and releases
 - Benchmark results exported as HTML, Markdown, CSV, and plots
 - Detailed benchmark documentation in StrongTypedCache.Benchmarks/README.md
+
+### Fixed
+- **Breaking Change**: Added `notnull` constraint to `TKey` in `InMemoryCache<TKey, TValue>` to prevent null key issues
+- Removed Windows-specific `BenchmarkDotNet.Diagnostics.Windows` package for cross-platform compatibility
+- Fixed nullable reference warnings in test projects
+- Added missing XML documentation for `InMemoryCache.AbsoluteExpiration` and `InMemoryCache.MemoryCache` properties
+- Fixed GitHub Actions build errors on Linux by removing platform-specific dependencies
 
 ## [1.0.1] - 2025-10-27
 ### Changed

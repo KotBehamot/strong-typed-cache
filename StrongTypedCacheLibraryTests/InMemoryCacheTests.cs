@@ -75,21 +75,21 @@ namespace Cache.Tests
         {
             var cache = new InMemoryCache<string, DummyValue>();
             var value = new DummyValue { Data = "test" };
-            Assert.Throws<ArgumentNullException>(() => cache.CreateEntry(null, value));
+            Assert.Throws<ArgumentNullException>(() => cache.CreateEntry(null!, value));
         }
 
         [Test]
         public void CreateEntry_ThrowsArgumentNullException_WhenValueIsNull()
         {
             var cache = new InMemoryCache<int, DummyValue>();
-            Assert.Throws<ArgumentNullException>(() => cache.CreateEntry(1, null));
+            Assert.Throws<ArgumentNullException>(() => cache.CreateEntry(1, null!));
         }
 
         [Test]
         public void Remove_ThrowsArgumentNullException_WhenKeyIsNull()
         {
             var cache = new InMemoryCache<string, DummyValue>();
-            Assert.Throws<ArgumentNullException>(() => cache.Remove(null));
+            Assert.Throws<ArgumentNullException>(() => cache.Remove(null!));
         }
 
         [Test]

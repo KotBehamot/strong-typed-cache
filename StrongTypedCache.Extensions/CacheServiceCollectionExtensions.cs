@@ -22,6 +22,7 @@ public static class CacheServiceCollectionExtensions
     public static IServiceCollection AddStrongTypedInMemoryCache<TKey, TValue>(
         this IServiceCollection services,
         int absoluteExpirationTimeSec = 3600)
+        where TKey : notnull
         where TValue : new()
     {
         if (services == null) throw new ArgumentNullException(nameof(services));
@@ -36,6 +37,7 @@ public static class CacheServiceCollectionExtensions
     public static IServiceCollection AddStrongTypedInMemoryCache<TKey, TValue>(
         this IServiceCollection services,
         CacheOptions options)
+        where TKey : notnull
         where TValue : new()
     {
         if (services == null) throw new ArgumentNullException(nameof(services));
@@ -50,6 +52,7 @@ public static class CacheServiceCollectionExtensions
         this IServiceCollection services,
         IConfiguration configuration,
         string sectionName = "StrongTypedCache")
+        where TKey : notnull
         where TValue : new()
     {
         if (services == null) throw new ArgumentNullException(nameof(services));
