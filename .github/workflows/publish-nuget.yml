@@ -60,7 +60,7 @@ jobs:
       - name: Run Release Benchmarks
         run: |
           cd StrongTypedCache.Benchmarks
-          dotnet run -c Release -- --filter * --exporters json markdown html
+          dotnet run -c Release -- --exporters json markdown html
 
       - name: Upload Release Benchmark Results
         uses: actions/upload-artifact@v4

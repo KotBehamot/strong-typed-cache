@@ -25,6 +25,23 @@ You can set the expiration time (in seconds):
 services.AddStrongTypedInMemoryCache<string, MyType>(absoluteExpirationTimeSec: 600); // 10 minutes
 ```
 
+### Nullable values support
+
+Cache now supports nullable value types:
+
+```csharp
+// String cache with nullable values
+services.AddStrongTypedInMemoryCache<int, string?>();
+
+// Later in code:
+cache.CreateEntry(1, null); // ? Allowed!
+if (cache.TryGetValue(1, out var value))
+{
+    // value can be null
+    Console.WriteLine(value?.Length ?? 0);
+}
+```
+
 ### Using the cache
 
 ```csharp
@@ -35,27 +52,41 @@ public class MyService
     private readonly ICache<string, MyType> _cache;
     public MyService(ICache<string, MyType> cache)
     {
-        _cache = cache;
+      _cache = cache;
     }
 
     public void Example()
     {
-        // Add to cache
+      // Add to cache
         _cache.CreateEntry("key1", new MyType());
 
-        // Get from cache
+   // Get from cache
         if (_cache.TryGetValue("key1", out var value))
-        {
-            // use value
-        }
+     {
+    // use value
+  }
 
         // Remove from cache
         _cache.Remove("key1");
 
-        // Get all values
-        var all = _cache.GetAllValues();
+  // Get all values
+    var all = _cache.GetAllValues();
     }
 }
+```
+
+### Key constraints
+
+?? **Important**: Keys cannot be null (enforced by `notnull` constraint):
+
+```csharp
+// ? This will cause compilation error
+services.AddStrongTypedInMemoryCache<string?, MyType>();
+
+// ? Use non-nullable key types
+services.AddStrongTypedInMemoryCache<string, MyType>();
+services.AddStrongTypedInMemoryCache<int, MyType>();
+services.AddStrongTypedInMemoryCache<Guid, MyType>();
 ```
 
 ### Interfaces
@@ -68,6 +99,7 @@ public class MyService
 - `StrongTypedCache.Abstractions` – interfaces.
 - `StrongTypedCacheLibrary` – cache implementation.
 - `StrongTypedCache.Extensions` – DI integration.
+- `StrongTypedCache.Benchmarks` – performance benchmarks using BenchmarkDotNet.
 
 ## Requirements
 

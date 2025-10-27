@@ -21,12 +21,63 @@ dotnet run -c Release
 
 ### Run Specific Benchmark Class
 ```bash
-dotnet run -c Release --filter *CreateEntryBenchmarks*
+# Use namespace.ClassName syntax (NOT wildcards!)
+dotnet run -c Release --filter StrongTypedCache.Benchmarks.CreateEntryBenchmarks
+dotnet run -c Release --filter StrongTypedCache.Benchmarks.TryGetValueBenchmarks
+```
+
+### Run Specific Benchmark Method
+```bash
+# Full path: namespace.ClassName.MethodName
+dotnet run -c Release --filter StrongTypedCache.Benchmarks.CreateEntryBenchmarks.CreateEntry_IntKey
+```
+
+### Run Multiple Specific Benchmarks
+```bash
+# Use wildcards ONLY in method names (not with --filter)
+dotnet run -c Release --filter *CreateEntry*  # This often FAILS
+# Instead, run the whole class or use --anyCategories/--allCategories
+```
+
+### Quick Dry Run (Fast Validation)
+```bash
+cd StrongTypedCache.Benchmarks
+dotnet run -c Release -- --job dry
 ```
 
 ### Run with Specific Configuration
 ```bash
 dotnet run -c Release -- --job short --memory
+```
+
+### List All Available Benchmarks
+```bash
+# Tree view
+dotnet run -c Release -- --list tree
+
+# Flat list (useful for scripting)
+dotnet run -c Release -- --list flat
+```
+
+### ?? Important: BenchmarkDotNet Filter Syntax
+
+BenchmarkDotNet filters work on **FULL QUALIFIED NAMES**, not wildcards:
+
+```bash
+# ? CORRECT - Full namespace
+dotnet run -c Release --filter StrongTypedCache.Benchmarks.CreateEntryBenchmarks
+
+# ? CORRECT - Full path with method
+dotnet run -c Release --filter StrongTypedCache.Benchmarks.CreateEntryBenchmarks.CreateEntry_IntKey
+
+# ? WRONG - Wildcard with --filter
+dotnet run -c Release -- --filter *CreateEntry*  # Returns 0 benchmarks!
+
+# ? ALTERNATIVE - No filter runs ALL
+dotnet run -c Release
+
+# ? ALTERNATIVE - Use job for quick tests
+dotnet run -c Release -- --job dry
 ```
 
 ## Benchmark Suites

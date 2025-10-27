@@ -79,13 +79,6 @@ namespace Cache.Tests
         }
 
         [Test]
-        public void CreateEntry_ThrowsArgumentNullException_WhenValueIsNull()
-        {
-            var cache = new InMemoryCache<int, DummyValue>();
-            Assert.Throws<ArgumentNullException>(() => cache.CreateEntry(1, null!));
-        }
-
-        [Test]
         public void Remove_ThrowsArgumentNullException_WhenKeyIsNull()
         {
             var cache = new InMemoryCache<string, DummyValue>();
@@ -112,6 +105,30 @@ namespace Cache.Tests
             cache.CreateEntry(1, v);
             System.Threading.Thread.Sleep(1200); // poczekaj aż wygaśnie
             Assert.That(cache.TryGetValue(1, out var _), Is.False);
+        }
+
+        [Test]
+        public void CreateEntry_AcceptsNullValue()
+        {
+            var cache = new InMemoryCache<int, DummyValue?>();
+            Assert.That(cache.CreateEntry(1, null), Is.True);
+            Assert.That(cache.TryGetValue(1, out var cached), Is.True);
+            Assert.That(cached, Is.Null);
+        }
+
+        [Test]
+        public void GetAllValues_IncludesNullValues()
+        {
+            var cache = new InMemoryCache<int, string?>();
+            cache.CreateEntry(1, "value1");
+            cache.CreateEntry(2, null);
+            cache.CreateEntry(3, "value3");
+
+            var values = cache.GetAllValues();
+            Assert.That(values, Has.Count.EqualTo(3));
+            Assert.That(values[0], Is.EqualTo("value1"));
+            Assert.That(values[1], Is.Null);
+            Assert.That(values[2], Is.EqualTo("value3"));
         }
     }
 }

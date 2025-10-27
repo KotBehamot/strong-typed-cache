@@ -46,7 +46,8 @@ jobs:
     - name: Run Benchmarks
       run: |
         cd StrongTypedCache.Benchmarks
-        dotnet run -c Release -- --filter * --exporters json markdown html
+        # Use shorter job for CI to save time
+        dotnet run -c Release -- --job short --exporters json markdown html
 
     - name: Upload Benchmark Results
       uses: actions/upload-artifact@v4

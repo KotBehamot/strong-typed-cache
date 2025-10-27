@@ -12,7 +12,6 @@ namespace Cache;
 /// <typeparam name="TValue">Type of the cache value.</typeparam>
 public class InMemoryCache<TKey, TValue> : ICache<TKey, TValue>
     where TKey : notnull
-    where TValue : new()
 {
     private readonly TimeSpan _absoluteExpiration;
     private readonly IMemoryCache _memoryCache;
@@ -45,7 +44,7 @@ public class InMemoryCache<TKey, TValue> : ICache<TKey, TValue>
         var items = new List<TValue?>();
         foreach (var key in _keys.Keys)
         {
-            if (_memoryCache.TryGetValue(key, out TValue value))
+            if (_memoryCache.TryGetValue(key, out TValue? value))
             {
                 items.Add(value);
             }
@@ -61,14 +60,13 @@ public class InMemoryCache<TKey, TValue> : ICache<TKey, TValue>
     /// <inheritdoc />
     public bool TryGetValue(TKey key, out TValue value)
     {
-        return _memoryCache.TryGetValue(key, out value);
+        return _memoryCache.TryGetValue(key, out value!);
     }
 
     /// <inheritdoc />
     public bool CreateEntry(TKey key, TValue value)
     {
         if (key is null) throw new ArgumentNullException(nameof(key));
-        if (value is null) throw new ArgumentNullException(nameof(value));
 
         using (var entry = _memoryCache.CreateEntry(key))
         {

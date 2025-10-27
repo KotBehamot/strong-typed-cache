@@ -23,7 +23,6 @@ public static class CacheServiceCollectionExtensions
         this IServiceCollection services,
         int absoluteExpirationTimeSec = 3600)
         where TKey : notnull
-        where TValue : new()
     {
         if (services == null) throw new ArgumentNullException(nameof(services));
         services.AddSingleton<ICache<TKey, TValue>>(_ =>
@@ -38,7 +37,6 @@ public static class CacheServiceCollectionExtensions
         this IServiceCollection services,
         CacheOptions options)
         where TKey : notnull
-        where TValue : new()
     {
         if (services == null) throw new ArgumentNullException(nameof(services));
         if (options == null) throw new ArgumentNullException(nameof(options));
@@ -53,7 +51,6 @@ public static class CacheServiceCollectionExtensions
         IConfiguration configuration,
         string sectionName = "StrongTypedCache")
         where TKey : notnull
-        where TValue : new()
     {
         if (services == null) throw new ArgumentNullException(nameof(services));
         if (configuration == null) throw new ArgumentNullException(nameof(configuration));

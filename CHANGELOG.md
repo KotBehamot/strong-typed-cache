@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog and this project adheres to Semantic Versioning.
 
-## [Unreleased]
+## [1.1.0] - 2025-10-27
+
 ### Added
 - Comprehensive benchmark suite using BenchmarkDotNet covering:
   - CreateEntry benchmarks for multiple key types (int, string, Guid, complex objects)
@@ -14,15 +15,25 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
   - Mixed-operation benchmarks simulating realistic workloads
   - Memory allocation benchmarks testing GC pressure and object sizes
 - Benchmark CI/CD integration: runs on main branch pushes and releases
-- Benchmark results exported as HTML, Markdown, CSV, and plots
+  - Main branch: `--job short` for faster execution (2 warmup + 5 iterations)
+  - Releases: Full job for maximum accuracy (3 warmup + 10 iterations)
+- Benchmark results exported as HTML, Markdown, CSV, and JSON
 - Detailed benchmark documentation in StrongTypedCache.Benchmarks/README.md
+- Support for nullable cache values - `TValue` can now be nullable types
+
+### Changed
+- **Breaking Change**: Removed `where TValue : new()` constraint from `InMemoryCache<TKey, TValue>`
+  - Cache now accepts nullable values (e.g., `InMemoryCache<int, string?>`)
+  - Previous code requiring parameterless constructor may need updates
+- **Breaking Change**: Removed null value validation in `CreateEntry` - null values are now allowed
+- **Breaking Change**: Added `notnull` constraint to `TKey` in `InMemoryCache<TKey, TValue>` to prevent null key issues
 
 ### Fixed
-- **Breaking Change**: Added `notnull` constraint to `TKey` in `InMemoryCache<TKey, TValue>` to prevent null key issues
 - Removed Windows-specific `BenchmarkDotNet.Diagnostics.Windows` package for cross-platform compatibility
 - Fixed nullable reference warnings in test projects
 - Added missing XML documentation for `InMemoryCache.AbsoluteExpiration` and `InMemoryCache.MemoryCache` properties
 - Fixed GitHub Actions build errors on Linux by removing platform-specific dependencies
+- Fixed benchmark CI workflow: removed invalid `--filter *` parameter that caused 0 benchmarks to run
 
 ## [1.0.1] - 2025-10-27
 ### Changed
