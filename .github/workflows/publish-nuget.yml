@@ -26,10 +26,11 @@ jobs:
       - name: Build
         run: dotnet build -c Release --no-restore
 
-      - name: Pack (Extensions as meta-package)
+      - name: Pack all packages
         run: |
-          dotnet pack StrongTypedCache.Extensions/StrongTypedCache.Extensions.csproj -c Release -o out \
-            /p:ContinuousIntegrationBuild=true
+          dotnet pack StrongTypedCache.Abstractions/StrongTypedCache.Abstractions.csproj -c Release -o out /p:ContinuousIntegrationBuild=true
+          dotnet pack StrongTypedCacheLibrary/StrongTypedCacheLibrary.csproj -c Release -o out /p:ContinuousIntegrationBuild=true
+          dotnet pack StrongTypedCache.Extensions/StrongTypedCache.Extensions.csproj -c Release -o out /p:ContinuousIntegrationBuild=true
 
       - name: Publish to NuGet.org
         env:

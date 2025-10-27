@@ -7,7 +7,7 @@
 
     <!-- NuGet metadata -->
     <PackageId>StrongTypedCache.Extensions</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Authors>KotBehamot</Authors>
     <Description>DI extensions for StrongTypedCache with in-memory implementation.</Description>
     <RepositoryUrl>https://github.com/KotBehamot/strong-typed-cache</RepositoryUrl>
@@ -18,8 +18,7 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
 
-    <!-- Ship referenced projects' binaries in one nupkg for simplicity -->
-    <IncludeReferencedProjects>true</IncludeReferencedProjects>
+    <!-- When packing, generate package dependencies from project references (default behavior). -->
   </PropertyGroup>
 
   <ItemGroup>
