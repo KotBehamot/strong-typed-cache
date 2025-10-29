@@ -50,7 +50,7 @@ jobs:
         dotnet run -c Release -- --job short --exporters json markdown html
 
     - name: Upload Benchmark Results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: always()
       with:
         name: benchmark-results

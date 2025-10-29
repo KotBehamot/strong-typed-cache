@@ -63,7 +63,7 @@ jobs:
           dotnet run -c Release -- --exporters json markdown html
 
       - name: Upload Release Benchmark Results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: release-benchmark-results-${{ github.ref_name }}
