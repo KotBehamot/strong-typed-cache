@@ -84,7 +84,7 @@ namespace StrongTypedCache.Extensions.Tests
         public void AddStrongTypedInMemoryCache_ThrowsArgumentNullException_WhenServicesIsNull()
         {
             IServiceCollection services = null!;
-            Assert.ThrowsException<ArgumentNullException>(() =>
+            Assert.Throws<ArgumentNullException>(() =>
                 StrongTypedCache.Extensions.CacheServiceCollectionExtensions.AddStrongTypedInMemoryCache<int, DummyValue>(services));
         }
 
@@ -93,7 +93,7 @@ namespace StrongTypedCache.Extensions.Tests
         {
             var services = new ServiceCollection();
             CacheOptions options = null!;
-            Assert.ThrowsException<ArgumentNullException>(() => services.AddStrongTypedInMemoryCache<int, DummyValue>(options));
+            Assert.Throws<ArgumentNullException>(() => services.AddStrongTypedInMemoryCache<int, DummyValue>(options));
         }
 
         [TestMethod()]
@@ -101,7 +101,7 @@ namespace StrongTypedCache.Extensions.Tests
         {
             var services = new ServiceCollection();
             IConfiguration config = null!;
-            Assert.ThrowsException<ArgumentNullException>(() => services.AddStrongTypedInMemoryCache<int, DummyValue>(config));
+            Assert.Throws<ArgumentNullException>(() => services.AddStrongTypedInMemoryCache<int, DummyValue>(config));
         }
 
         // Minimal configuration source/provider to avoid external packages in tests
