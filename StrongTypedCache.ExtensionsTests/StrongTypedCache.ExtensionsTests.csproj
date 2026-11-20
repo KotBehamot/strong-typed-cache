@@ -15,11 +15,6 @@
     <PackageReference Include="MSTest" Version="4.5.3" />
   </ItemGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Microsoft.VisualStudio.TestTools.UnitTesting" Version="4.3.2" />
-      <PackageReference Include="MSTest.TestFramework" Version="2.2.7" />
-    </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\StrongTypedCache.Extensions\StrongTypedCache.Extensions.csproj" />
     <ProjectReference Include="..\StrongTypedCache.Abstractions\StrongTypedCache.Abstractions.csproj" />
